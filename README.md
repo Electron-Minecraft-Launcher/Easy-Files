@@ -1,2 +1,4 @@
 # Easy-Files
- A simple File manager for the Web.
+### A simple File manager for the Web.
+
+Just download, configure, and enjoy!
