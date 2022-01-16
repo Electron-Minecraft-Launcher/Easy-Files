@@ -28,7 +28,7 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 
 <head>
 	<meta charset="UTF-8">
-	<title>FILE EXPLORER</title>
+	<title>Easy Files</title>
 	<link rel="stylesheet" href="./assets/css/index.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -77,7 +77,7 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 		?>
 
 				<tr id="<?= $file ?>" onclick="selectElement('<?= $file ?>', event)">
-					<td>
+					<td style="border-bottom-left-radius: 5px; border-top-left-radius: 5px;">
 						<img src="./assets/images/folder.png" width="20px">
 					</td>
 					<td>
@@ -86,7 +86,7 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 					<td>
 						<?= date("d.m.Y H:i", filemtime("./files/" . $file)) ?>
 					</td>
-					<td>
+					<td style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;">
 
 					</td>
 				</tr>
