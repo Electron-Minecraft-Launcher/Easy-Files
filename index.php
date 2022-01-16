@@ -1,5 +1,7 @@
 <?php
 
+include('./config.php');
+
 if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 
 	if (
@@ -14,10 +16,10 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 		strpos($_POST['new-folder'], "\"") !== false
 	) {
 		header('Location: ./?error=invalid%20foldername');
-	} else if (file_exists("./files/" . $_POST['new-folder'])) {
+	} else if (file_exists($files_folder . $_POST['new-folder'])) {
 		header('Location: ./?error=folder%20already%20existing');
 	} else {
-		mkdir("./files/" . $_POST['new-folder'], 0777, false);
+		mkdir($files_folder . $_POST['new-folder'], 0777, false);
 		header('Location: ./?success=fodler%20created');
 	}
 }
@@ -68,11 +70,11 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 
 		<?php
 
-		$scan = array_diff(scandir("./files/"), array('.', '..'));
+		$scan = array_diff(scandir($files_folder), array('.', '..'));
 
 		foreach ($scan as $file) {
 
-			if (is_dir("./files/" . $file)) {
+			if (is_dir($files_folder . $file)) {
 
 		?>
 
@@ -84,7 +86,7 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 						<?= $file ?>
 					</td>
 					<td>
-						<?= date("d.m.Y H:i", filemtime("./files/" . $file)) ?>
+						<?= date("d.m.Y H:i", filemtime($files_folder . $file)) ?>
 					</td>
 					<td style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;">
 
@@ -98,7 +100,7 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 
 		foreach ($scan as $file) {
 
-			if (!is_dir("./files/" . $file)) {
+			if (!is_dir($files_folder . $file)) {
 				// echo "<p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" . $file . "&nbsp&nbsp&nbsp;<button></button></p>";
 			}
 		}
