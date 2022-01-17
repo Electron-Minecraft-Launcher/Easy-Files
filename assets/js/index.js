@@ -19,7 +19,8 @@ document.getElementById("add-folder").addEventListener("click", () => {
 	document.getElementById("modal-title").innerHTML = "Nouveau dossier"
 	document.getElementById("modal-content").innerHTML = `
 	<form method="POST">
-		<input type="text" name="new-folder" id="new-folder" style="margin-bottom: 0" placeholder="Nom du dossier">
+		<input type="text" name="new-folder" id="new-folder" style="margin-bottom: 0" placeholder="Nom du dossier" selected>
+		<input type="text" name="files-folder" style="display: none" value="${filesFolder}">
 		<button type="submit">Créer</button>
 	</form>
 	`
@@ -29,7 +30,6 @@ document.getElementById("close-modal").addEventListener("click", () => {
 	document.getElementById("modal-background").style.display = "none"
 })
 
-let last = []
 
 function selectElement(id, e) {
 
@@ -69,4 +69,18 @@ function selectElement(id, e) {
 			last = [id]
 		}
 	}
+
+	if (last.length >= 1) {
+		document.getElementById("delete").disabled = false
+		document.getElementById("to-delete").value = JSON.stringify(last)
+		document.getElementById("files-folder-delete").value = filesFolder
+	} else {
+		document.getElementById("delete").disabled = true
+		document.getElementById("to-delete").value = ""
+	}
+
+}
+
+function openFolder(path) {
+	window.location.href = "./?path=" + path.replaceAll("/", "%2F")
 }

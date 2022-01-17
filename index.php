@@ -2,6 +2,9 @@
 
 include('./config.php');
 
+if (isset($_GET['path']))
+	$files_folder = $files_folder . $_GET['path'];
+
 if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 
 	if (
@@ -16,13 +19,60 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 		strpos($_POST['new-folder'], "\"") !== false
 	) {
 		header('Location: ./?error=invalid%20foldername');
+		return;
 	} else if (file_exists($files_folder . $_POST['new-folder'])) {
 		header('Location: ./?error=folder%20already%20existing');
+		return;
 	} else {
 		mkdir($files_folder . $_POST['new-folder'], 0777, false);
-		header('Location: ./?success=fodler%20created');
+		header('Location: ./?path=' . str_replace("/", "%2F", $_POST['files-folder']));
+		return;
 	}
 }
+
+if (isset($_POST['to-delete'])) {
+
+	try {
+		$to_delete = json_decode($_POST['to-delete']);
+
+		foreach ($to_delete as $value) {
+
+			try {
+				rmrf($files_folder . $value);
+				header('Location: ./?path=' . str_replace("/", "%2F", $_POST['files-folder']));
+				return;
+			} catch (\Throwable $th) {
+				header('Location: ./error=true&path=' . str_replace("/", "%2F", $_POST['files-folder']));
+				die;
+			}
+		}
+	} catch (\Throwable $th) {
+		header('Location: ./?error=true&path=' . str_replace("/", "%2F", $_POST['files-folder']));
+		die;
+	}
+
+	return;
+}
+
+
+function rmrf($dir)
+{
+
+	if (is_dir($dir)) {
+
+		$files = array_diff(scandir($dir), ['.', '..']);
+		
+		foreach ($files as $file) {
+			rmrf($dir. "/" . $file);
+		}
+
+		rmdir($dir);
+	} else {
+
+		unlink($dir);
+	}
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -35,16 +85,20 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
+<script>
+	let filesFolder = "<?php if (isset($_GET['path'])) echo $_GET['path'] ?>"
+	let last = [];
+</script>
+
 <body style="background-color: #1e1e1e; color: white;">
 
-	<!-- <form method="POST">
-
-		<input type="text" name="new-folder" id="new-folder" placeholder="Nouveau dossier">
-		<button type="submit">Créer</button>
-
-	</form> -->
-
 	<button class="small" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;<i class="fas fa-caret-down"></i></button>
+
+	<form method="POST" style="display: inline;">
+		<button class="small w35 margin-left" id="delete" disabled><i class="fas fa-trash"></i></button>
+		<input type="text" name="to-delete" id="to-delete" style="display: none">
+		<input type="text" name="files-folder" id="files-folder-delete" style="display: none">
+	</form>
 
 	<div class="add-files" id="add-files">
 		<p class="add-options" id="add-folder"><i class="fas fa-folder"></i>&nbsp;&nbsp;Nouveau Dossier</p>
@@ -76,9 +130,15 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 
 			if (is_dir($files_folder . $file)) {
 
-		?>
+				if (isset($_GET['path'])) {
+					$url = $_GET['path'] . $file . "/";
+				} else {
+					$url = $file . "/";
+				}
 
-				<tr id="<?= $file ?>" onclick="selectElement('<?= $file ?>', event)">
+
+		?>
+				<tr id="<?= $file ?>" onclick="selectElement('<?= $file ?>', event)" ondblclick="openFolder('<?= $url ?>')">
 					<td style="border-bottom-left-radius: 5px; border-top-left-radius: 5px;">
 						<img src="./assets/images/folder.png" width="20px">
 					</td>
@@ -92,6 +152,7 @@ if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 
 					</td>
 				</tr>
+
 
 		<?php
 
