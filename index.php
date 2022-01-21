@@ -5,73 +5,9 @@ include('./config.php');
 if (isset($_GET['path']))
 	$files_folder = $files_folder . $_GET['path'];
 
-if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
-
-	if (
-		strpos($_POST['new-folder'], "*") !== false ||
-		strpos($_POST['new-folder'], "\\") !== false ||
-		strpos($_POST['new-folder'], "/") !== false ||
-		strpos($_POST['new-folder'], "?") !== false ||
-		strpos($_POST['new-folder'], ":") !== false ||
-		strpos($_POST['new-folder'], ">") !== false ||
-		strpos($_POST['new-folder'], "<") !== false ||
-		strpos($_POST['new-folder'], "|") !== false ||
-		strpos($_POST['new-folder'], "\"") !== false
-	) {
-		header('Location: ./?error=invalid%20foldername');
-		return;
-	} else if (file_exists($files_folder . $_POST['new-folder'])) {
-		header('Location: ./?error=folder%20already%20existing');
-		return;
-	} else {
-		mkdir($files_folder . $_POST['new-folder'], 0777, false);
-		header('Location: ./?path=' . str_replace("/", "%2F", $_POST['files-folder']));
-		return;
-	}
-}
-
-if (isset($_POST['to-delete'])) {
-
-	try {
-		$to_delete = json_decode($_POST['to-delete']);
-
-		foreach ($to_delete as $value) {
-
-			try {
-				rmrf($files_folder . $value);
-				header('Location: ./?path=' . str_replace("/", "%2F", $_POST['files-folder']));
-				return;
-			} catch (\Throwable $th) {
-				header('Location: ./error=true&path=' . str_replace("/", "%2F", $_POST['files-folder']));
-				die;
-			}
-		}
-	} catch (\Throwable $th) {
-		header('Location: ./?error=true&path=' . str_replace("/", "%2F", $_POST['files-folder']));
-		die;
-	}
-
-	return;
-}
-
-
-function rmrf($dir)
-{
-
-	if (is_dir($dir)) {
-
-		$files = array_diff(scandir($dir), ['.', '..']);
-		
-		foreach ($files as $file) {
-			rmrf($dir. "/" . $file);
-		}
-
-		rmdir($dir);
-	} else {
-
-		unlink($dir);
-	}
-}
+include('./assets/includes/new_folder.php');
+include('./assets/includes/upload.php');
+include('./assets/includes/delete.php');
 
 ?>
 
@@ -102,8 +38,31 @@ function rmrf($dir)
 
 	<div class="add-files" id="add-files">
 		<p class="add-options" id="add-folder"><i class="fas fa-folder"></i>&nbsp;&nbsp;Nouveau Dossier</p>
-		<p class="add-options" id="upload"><i class="fas fa-upload"></i>&nbsp;&nbsp;Charger des fichiers/dossiers</p>
+		<p class="add-options" id="upload"><i class="fas fa-upload"></i>&nbsp;&nbsp;Importer des fichiers/dossiers</p>
 	</div>
+
+	<p id="path"><a href="./?path=" class="path"><i class="fas fa-home"></i></a><?php
+
+																																							if (isset($_GET['path'])) {
+
+																																								$path = explode("/", $_GET['path']);
+
+																																								foreach ($path as $key => $dir) {
+
+																																									$url_path = null;
+																																									$i = 0;
+
+																																									while ($i < $key + 1) {
+																																										$url_path .= str_replace(" ", "%20", $path[$i]) . "%2F";
+																																										$i++;
+																																									}
+
+																																									echo '
+																																									<i class="fas fa-caret-right path-caret"></i><a href="./?path=' . $url_path . '" class="path">' . $dir . '</a>';
+																																								}
+																																							}
+
+																																							?></p>
 
 	<table>
 
@@ -139,8 +98,8 @@ function rmrf($dir)
 
 		?>
 				<tr id="<?= $file ?>" onclick="selectElement('<?= $file ?>', event)" ondblclick="openFolder('<?= $url ?>')">
-					<td style="border-bottom-left-radius: 5px; border-top-left-radius: 5px;">
-						<img src="./assets/images/folder.png" width="20px">
+					<td style="border-bottom-left-radius: 5px; border-top-left-radius: 5px; text-align: center">
+						<i class="fas fa-folder"></i>
 					</td>
 					<td>
 						<?= $file ?>
@@ -154,7 +113,7 @@ function rmrf($dir)
 				</tr>
 
 
-		<?php
+			<?php
 
 			}
 		}
@@ -162,7 +121,81 @@ function rmrf($dir)
 		foreach ($scan as $file) {
 
 			if (!is_dir($files_folder . $file)) {
-				// echo "<p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" . $file . "&nbsp&nbsp&nbsp;<button></button></p>";
+
+				if (isset($_GET['path'])) {
+					$url = $_GET['path'] . $file . "/";
+				} else {
+					$url = $file . "/";
+				}
+
+
+			?>
+				<tr id="<?= $file ?>" onclick="selectElement('<?= $file ?>', event)">
+					<td style="border-bottom-left-radius: 5px; border-top-left-radius: 5px; text-align: center">
+						<?php
+
+						if (pathinfo($url, PATHINFO_EXTENSION) == "jar")
+							echo '<i class="fab fa-java"></i>';
+						else if (
+							pathinfo($url, PATHINFO_EXTENSION) == "png" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "jpg" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "jpeg" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "gif" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "bmp"
+						)
+							echo '<i class="fas fa-image"></i>';
+						else if (
+							pathinfo($url, PATHINFO_EXTENSION) == "mp4" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "avi" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "wmv" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "mov" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "ogv" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "ogg" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "flv"
+						)
+							echo '<i class="fas fa-film"></i>';
+						else if (
+							pathinfo($url, PATHINFO_EXTENSION) == "mp3" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "ma4" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "wav" ||
+							pathinfo($url, PATHINFO_EXTENSION) == "m4a"
+						)
+							echo '<i class="fas fa-music"></i>';
+						else if (
+							pathinfo($url, PATHINFO_EXTENSION) == "txt" ||
+							pathinfo($url, PATHINFO_EXTENSION) == null
+						)
+							echo '<i class="fas fa-file-alt"></i>';
+
+						?>
+						<!-- <img src="./assets/images/folder.png" width="20px"> -->
+					</td>
+					<td>
+						<?= $file ?>
+					</td>
+					<td>
+						<?= date("d.m.Y H:i", filemtime($files_folder . $file)) ?>
+					</td>
+					<td style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;">
+						<?php
+
+						if (filesize($files_folder . $file) < 1000)
+							echo filesize($files_folder . $file) . " o";
+						else if (filesize($files_folder . $file) < 1000000)
+							echo round(filesize($files_folder . $file) / 1000, 2) . " Ko";
+						else if (filesize($files_folder . $file) < 1000000000)
+							echo round(filesize($files_folder . $file) / 1000000, 2) . " Mo";
+						else
+							echo round(filesize($files_folder . $file) / 000000000, 2) . " Go";
+
+
+						?>
+					</td>
+				</tr>
+
+
+		<?php
+
 			}
 		}
 

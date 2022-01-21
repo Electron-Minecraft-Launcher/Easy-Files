@@ -12,7 +12,7 @@
 }
 
 * {
-	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
 table {
@@ -38,9 +38,24 @@ td {
 	border-radius: 10px;
 }
 
+a {
+	color: var(--white-orange);
+	transition: color 0.3s;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: var(--light-orange)
+}
+
+a:hover:active {
+	color: white;
+}
+
 button {
 	font-size: 14px;
-	background-color: #333333;
+	background-color: var(--light-black);
 	border: 1px solid var(--white-orange);
 	outline: none;
 	padding: 7px;
@@ -71,11 +86,11 @@ button:active {
 
 button:disabled {
 	color: rgb(187, 187, 187);
-	border: 1px solid #232323;
+	border: 1px solid var(--light-background-color);
 	cursor: default;
 }
 
-input {
+input:not([type=file]) {
 	font-size: 14px;
 	background-color: var(--light-black);
 	border: 1px solid var(--dark-gray);
@@ -94,16 +109,20 @@ input::placeholder {
 	color: var(--light-gray);
 }
 
-input:hover {
+input:hover:not([type=file]) {
 	border: 1px solid var(--border-gray);
 }
 
-input:focus {
+input:focus:not([type=file]) {
 	border: 1px solid var(--gray);
 }
 
+.path-caret {
+	margin: 0 7px
+}
+
 .add-files {
-	background-color: #333333;
+	background-color: var(--light-black);
 	padding: 5px;
 	border-radius: 5px;
 	position: absolute;
@@ -114,10 +133,11 @@ input:focus {
 	margin: 0;
 	padding: 7px;
 	cursor: default;
+	transition: all 0.3s;
 }
 
 .add-options:hover {
-	background-color: #555555;
+	background-color: rgb(85, 85, 85, 0.5);
 	border-radius: 5px;
 }
 
@@ -135,7 +155,7 @@ input:focus {
 	width: 564px;
 	margin: 150px auto 0 auto;
 	position: relative;
-	background-color: #1e1e1e;
+	background-color: var(--background-color);
 	padding: 25px;
 	border-radius: 5px;
 	box-shadow: 0 0 10px black;

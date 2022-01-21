@@ -26,6 +26,26 @@ document.getElementById("add-folder").addEventListener("click", () => {
 	`
 })
 
+
+document.getElementById("upload").addEventListener("click", () => {
+	document.getElementById("add-files").style.display = "none"
+	addOpen = false
+	document.getElementById("modal-background").style.display = "block"
+	document.getElementById("modal-title").innerHTML = "Importer des fichiers/dossiers"
+	document.getElementById("modal-content").innerHTML = `	
+		<form method="POST" enctype="multipart/form-data">
+			<p><label for="upload-files">Importer des fichiers : <input id="upload-files" type="file" name="upload-files[]" accept"*" multiple></label></p>
+			<p><label for="upload-folder">Importer un dossier : <input id="upload-folders" type="file" name="upload-folders[]" webkitdirectory mozdirectory></label></p>
+			<input type="text" name="files-folder" style="display: none" value="${filesFolder}">
+			<button type="submit">Importer</button>
+		</form>
+	`
+})
+
+document.getElementById("close-modal").addEventListener("click", () => {
+	document.getElementById("modal-background").style.display = "none"
+})
+
 document.getElementById("close-modal").addEventListener("click", () => {
 	document.getElementById("modal-background").style.display = "none"
 })
