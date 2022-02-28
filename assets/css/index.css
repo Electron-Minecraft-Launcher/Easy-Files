@@ -1,5 +1,5 @@
 :root {
-	--background-color: #1e1e1e;
+	--background-color: #232323;
 	--light-background-color: #232323;
 	--light-black: #333333;
 	--dark-gray: #555555;
@@ -17,16 +17,74 @@
 
 table {
 	border-collapse: collapse;
+	color: white;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 tr {
 	height: 30px;
 	cursor: default;
+	padding: 5px 7px;
 }
 
-td {
-	padding: 5px;
+th, td {
+	padding: 5px 7px;
 }
+
+button:disabled {
+	color: rgb(187, 187, 187);
+	border: 1px solid var(--light-background-color);
+	cursor: default;
+}
+
+p.path {
+	margin: 32px 0 16px 0 !important
+}
+
+.path-caret {
+	margin: 0 7px
+}
+
+.add-files {
+	background-color: var(--light-black);
+	padding: 5px;
+	border-radius: 5px;
+	position: absolute;
+	display: none;
+}
+
+.add-options {
+	margin: 0;
+	padding: 5px 7px;
+	cursor: pointer;
+	transition: all 0.3s;
+	font-size: 14px
+}
+
+.add-options:hover {
+	background-color: rgb(85, 85, 85, 0.5);
+	border-radius: 5px;
+}
+
+table {
+	border-collapse: collapse;
+	color: white;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+
+
+
 
 .options-click p {
 	padding: 5px 7px;
@@ -169,4 +227,8 @@ input:focus:not([type=file]) {
 
 .margin-left {
 	margin-left: 10px;
+}
+
+.center {
+	text-align: center;
 }

@@ -1,0 +1,18 @@
+{
+	"newfolder": "Nouveau dossier",
+	"uploadfilesfolder": "Importer des fichiers/dossier",
+	"rename": "Renommer",
+	"name": "Nom",
+	"date": "Date de modification",
+	"size": "Taille",
+	"foldername": "Nom du dossier",
+	"uploadfiles": "Importer des fichiers",
+	"uploadfolder": "Importer un dossier",
+	"newname": "Nouveau nom",
+	"create": "Créer",
+	"upload": "Importer",
+	"notavailable": "Cette fonction n'est pas disponible pour le moment...",
+	"warningupload": "Les éléments importés n'écrasent <b>pas</b> les éléments déjà présents !",
+	"warningrename": "Les éléments renommés n'écrasent <b>pas</b> les éléments déjà présents !",
+	"more": "Pour plus d'options, vous pouvez accéder à vos fichiers depuis un client FTP ou SFTP."
+}

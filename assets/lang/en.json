@@ -1,0 +1,18 @@
+{
+	"newfolder": "New folder",
+	"uploadfilesfolder": "Upload files or folder",
+	"rename": "Rename",
+	"name": "Name",
+	"date": "Editing date",
+	"size": "Size",
+	"foldername": "Name of the folder",
+	"uploadfiles": "Upload files",
+	"uploadfolder": "Upload folder",
+	"newname": "New name",
+	"create": "Create",
+	"upload": "Upload",
+	"notavailable": "This feature is not available yet...",
+	"warningupload": "Imported elements do <b>not</b> overwrite existing elements!",
+	"warningrename": "Renamed items do <b>not</b> override items already present!",
+	"more": "For more options, you can access to your files through a FTP or SFTP client"
+}

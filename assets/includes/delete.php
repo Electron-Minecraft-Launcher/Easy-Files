@@ -1,5 +1,10 @@
 <?php
 
+if (!isset($files_folder)) {
+	header('Location: ./');
+	die;
+}
+
 if (isset($_POST['to-delete'])) {
 
 	try {
@@ -9,6 +14,7 @@ if (isset($_POST['to-delete'])) {
 
 			try {
 				rmrf($files_folder . $value);
+				header('Location: ./?path=' . str_replace("/", "%2F", $_POST['files-folder']));
 			} catch (\Throwable $th) {
 				header('Location: ./error=true&path=' . str_replace("/", "%2F", $_POST['files-folder']));
 				die;
@@ -18,8 +24,6 @@ if (isset($_POST['to-delete'])) {
 		header('Location: ./?error=true&path=' . str_replace("/", "%2F", $_POST['files-folder']));
 		die;
 	}
-
-	header('Location: ./?path=' . str_replace("/", "%2F", $_POST['files-folder']));
 	return;
 }
 

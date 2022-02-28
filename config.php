@@ -9,5 +9,12 @@
 /**
  * @var string You can set here the path of the folder that contains the files that you need to manage. This path is relative to the `index.php` file. 
  * Don't forget the `/` at the end of the path!
+ * Not null.
  */
 $files_folder = "./files/";
+
+/**
+ * @var string This is the language of Easy Files. You can set this value to `en` or `fr`. 
+ * Not null.
+ */
+$lang = "en";

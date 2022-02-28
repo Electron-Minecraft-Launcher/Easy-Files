@@ -1,5 +1,10 @@
 <?php
 
+if (!isset($files_folder)) {
+	header('Location: ./');
+	die;
+}
+
 if (isset($_POST['new-folder']) && strlen($_POST['new-folder']) >= 1) {
 
 	if (
